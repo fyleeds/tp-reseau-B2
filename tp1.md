@@ -7,9 +7,9 @@ Pour ce TP, on va utiliser **uniquement votre poste** (pas de VM, rien, quedal, 
 
 Le but du TP : se remettre dans le bain tranquillement en manipulant pas mal de concepts qu'on a vu l'an dernier.
 
-C'est un premier TP *chill*, qui vous(ré)apprend à maîtriser votre poste en ce qui concerne le réseau. Faites le seul ou avec votre mate préféré bien sûr, mais jouez le jeu, faites vos propres recherches.
+C'est un premier TP *hard*, qui vous(ré)apprend à maîtriser votre poste en ce qui concerne le réseau. Faites le seul ou avec votre mate préféré bien sûr, mais jouez le jeu, faites vos propres recherches.
 
-La "difficulté" va crescendo au fil du TP, mais la solution tombe très vite avec une ptite recherche Google si vos connaissances de l'an dernier deviennent floues.
+La "difficulté" va crescendo (bravo l'italien) au fil du TP, mais la solution tombe très vite avec une ptite recherche Google si vos connaissances de l'an dernier deviennent floues (comme mon avenir (lemien)).
 
 - [TP1 : Maîtrise réseau du poste](#tp1--maîtrise-réseau-du-poste)
 - [I. Basics](#i-basics)
@@ -289,6 +289,8 @@ Faites *clean* 🧹, vous êtes des grands now :
 - vous effectuerez la requête DNS en ligne de commande
 
 > Si vous utilisez un filtre Wireshark pour mieux voir ce trafic, précisez-le moi dans le compte-rendu.
+
+(./captures/arp.pcap)
 
 ---
 
