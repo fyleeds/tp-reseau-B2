@@ -17,7 +17,6 @@ parser.add_argument("-p", "--port", type=int, default=13337,
                     "-p, --port                  Specify the port for the server to run on."
                     "                            Ports are integer between 0 and 65535"
                     "                            Ports below 1025 are considered privileged."
-                    "-h, --help                  Help of the command"
 )
 
 # Permet de mettre à jour notre objet ArgumentParser avec les nouvelles options
