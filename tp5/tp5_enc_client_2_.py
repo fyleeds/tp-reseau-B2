@@ -20,9 +20,9 @@ if match:
   if -4294967295 <= num1 <= 4294967295 and -4294967295 <= num2 <= 4294967295:
 
     # on encode le message explicitement en UTF-8 pour récup un tableau de bytes
-    encoded_num1 = num1.to_bytes(2, byteorder='big')
+    encoded_num1 = num1.to_bytes((num1.bit_length()+7)//8, byteorder='big')
     encoded_operator = operator.encode('utf-8')
-    encoded_num2 = str(num2).encode('utf-8')
+    encoded_num2 = num2.to_bytes((num2.bit_length()+7)//8, byteorder='big')
     encoded_endmessage = "hehe".encode('utf-8')
 
     # on calcule sa taille, en nombre d'octets
