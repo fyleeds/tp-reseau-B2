@@ -11,21 +11,10 @@ conn, addr = s.accept()
 while True:
 
   try:
-    # On lit les 4 premiers octets qui arrivent du client
-    # Car dans le client, on a fixé la taille du header à 4 octets
-    isEnded = 0
+
     # Une liste qui va contenir les données reçues
     chunks = []
-    # while isEnded == 0 :
-    # data = conn.recv(4)
-    # if not data:
-    #   break
-
-    # # On lit la valeur
-    # msg_len = int.from_bytes(data, byteorder='big')
-
-    # print(f"Lecture des {msg_len} prochains octets")
-
+    
     # bytes_received = 0
     # while bytes_received < msg_len:
         # Si on reçoit + que la taille annoncée, on lit 1024 par 1024 octets
@@ -49,7 +38,7 @@ while True:
       except Exception as e:
         print(f" error sending {e}")
     else :
-      print(f"Received from client {message_received}")
+      print(f"Error Request : Received from client {message_received}")
     
     conn.close()
     s.close()
