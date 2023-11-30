@@ -15,9 +15,6 @@ while True:
     # Une liste qui va contenir les données reçues
     chunks = []
     
-    # bytes_received = 0
-    # while bytes_received < msg_len:
-        # Si on reçoit + que la taille annoncée, on lit 1024 par 1024 octets
     chunk = conn.recv(
                             1024)
     if not chunk:
@@ -26,9 +23,6 @@ while True:
     # on ajoute le morceau de 1024 ou moins à notre liste
     chunks.append(chunk)
       
-      # on ajoute la quantité d'octets reçus au compteur
-      # bytes_received += len(chunk)
-
     # ptit one-liner pas combliqué à comprendre pour assembler la liste en un seul message
     message_received = b"".join(chunks).decode('utf-8')
     if "GET / " in message_received:

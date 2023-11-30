@@ -17,14 +17,6 @@ while True:
     # Une liste qui va contenir les données reçues
     chunks = []
 
-    # bytes_received = 0
-    
-    # while True:
-    #     chunk = s.recv(1024)
-    #     if not chunk:
-    #         break
-    #     chunks.append(chunk)
-
     chunk = conn.recv(
                             1024)
     if not chunk:
@@ -32,8 +24,6 @@ while True:
 
     # on ajoute le morceau de 1024 ou moins à notre liste
     chunks.append(chunk)
-
-    # bytes_received += len(chunk)
 
     # ptit one-liner pas combliqué à comprendre pour assembler la liste en un seul message
     message_received = b"".join(chunks).decode('utf-8')
@@ -67,7 +57,7 @@ while True:
       except Exception as e:
         print(f" error sending {e}")
       
-    elif "GET /toto.html HTTP/1.1\r\n" in message_received:
+    elif "GET / toto.html HTTP/1.1\r\n" in message_received:
       try:
         folder_path = os.path.dirname(os.path.abspath(__file__))
 
