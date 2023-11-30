@@ -54,6 +54,7 @@ else:
 
 # Réception et affichage du résultat
 s_data = s.recv(1024)
-print(f"résultat : {s_data.decode()}")
+result = int.from_bytes(s_data, byteorder='big')
+print(f"résultat : {result}")
 s.close()
 sys.exit(0)
