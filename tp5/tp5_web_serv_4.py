@@ -35,15 +35,13 @@ while True:
       # Create handlers
       c_handler = logging.StreamHandler()
       c_handler.setLevel(logging.DEBUG)  # Set to DEBUG to ensure all levels are logged to console
-      # Create formatters and add it to handlers
-      formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
       # Add handlers to the logger
       logger.addHandler(c_handler)
     except Exception as e:
       print(f"Failed to configure logging: {e}")
       sys.exit(1)
     
-    if "GET / HTTP/1.1\r\n" in message_received:
+    if "/ HTTP/1.1\r\n" in message_received:
       try:
         folder_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -57,7 +55,7 @@ while True:
       except Exception as e:
         print(f" error sending {e}")
       
-    elif "GET / toto.html HTTP/1.1\r\n" in message_received:
+    elif "/toto.html HTTP/1.1\r\n" in message_received:
       try:
         folder_path = os.path.dirname(os.path.abspath(__file__))
 

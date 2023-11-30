@@ -47,15 +47,13 @@ while True:
       # Create handlers
       c_handler = logging.StreamHandler()
       c_handler.setLevel(logging.DEBUG)  # Set to DEBUG to ensure all levels are logged to console
-      # Create formatters and add it to handlers
-      formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
       # Add handlers to the logger
       logger.addHandler(c_handler)
     except Exception as e:
       print(f"Failed to configure logging: {e}")
       sys.exit(1)
     
-    if "GET / HTTP/1.1\r\n" in message_received:
+    if "/ HTTP/1.1\r\n" in message_received:
       try:
         folder_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -83,10 +81,57 @@ while True:
       except Exception as e:
         print(f" error sending {e}")
     elif ".jpg" in message_received:
-      try:
-        pass
-      except Exception as e:
-        print(f" error sending {e}")
+
+        folder_path = os.path.dirname(os.path.abspath(__file__))
+
+        file = open(f'{folder_path}/htdocs/yoshi.jpg','rb')
+        jpg_data = file.read()
+        file.close()
+
+        # Préparation de la réponse HTTP
+        
+        http_response = b'HTTP/1.1 200 OK\r\n'
+        http_response += b'Content-Type: image/jpeg\r\n'
+        http_response += b'Content-Length: ' + str(len(jpg_data)).encode() + b'\r\n'
+        http_response += b'\r\n'
+
+        header = jpg_data[0:2]
+        if not header:
+          break
+        else :
+          logger.info("this is the header of the image : %s",header)
+        
+        jpg_data = jpg_data[2:]
+
+        jpg_data_len = len(bytearray(jpg_data))
+        logger.info(f"Lecture des {jpg_data_len} prochains octets")
+
+        chunks = []
+        bytes_received = 0
+        is_Ended= 0
+        while isEnded==0  :
+          while bytes_received < jpg_data_len:
+            # Si on reçoit + que la taille annoncée, on lit 1024 par 1024 octets
+            chunk = jpg_data[lastIndex:min(msg_len - bytes_received,
+                                    1024)])
+            if not chunk:
+              raise RuntimeError('Invalid chunk received bro')
+
+            try:
+              if chunk.decode() == "0xffd9":
+                chunks.append(chunk)
+                isEnded = 1
+              else :
+                # on ajoute le morceau de 1024 ou moins à notre liste
+                chunks.append(chunk)
+            except:
+              # on ajoute le morceau de 1024 ou moins à notre liste
+              chunks.append(chunk)
+            
+            # on ajoute la quantité d'octets reçus au compteur
+            bytes_received += len(chunk)
+
+
     else:
       print(f"Received from client {message_received}")
     

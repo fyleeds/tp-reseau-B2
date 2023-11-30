@@ -28,7 +28,7 @@ while True:
     # ptit one-liner pas combliqué à comprendre pour assembler la liste en un seul message
     message_received = b"".join(chunks).decode('utf-8')
     
-    if "GET / HTTP/1.1\r\n" in message_received:
+    if "/ HTTP/1.1\r\n" in message_received:
       try:
         folder_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -40,7 +40,7 @@ while True:
         conn.sendall(http_response.encode())
       except Exception as e:
         print(f" error sending {e}")
-    elif "GET / toto.html HTTP/1.1\r\n" in message_received:
+    elif "/toto.html HTTP/1.1\r\n" in message_received:
       try:
         folder_path = os.path.dirname(os.path.abspath(__file__))
 

@@ -25,7 +25,7 @@ while True:
       
     # ptit one-liner pas combliqué à comprendre pour assembler la liste en un seul message
     message_received = b"".join(chunks).decode('utf-8')
-    if "GET / " in message_received:
+    if "/ HTTP/1.1\r\n" in message_received:
       html_content = "HTTP/1.0 200 OK\n\n<h1>Hello je suis un serveur HTTP</h1>"
       try:
         conn.sendall(html_content.encode())
