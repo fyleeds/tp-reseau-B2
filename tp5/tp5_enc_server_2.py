@@ -69,7 +69,7 @@ while True:
 
     try:
       print(f" le résultat est {result}")
-      conn.send((str(result)).encode())
+      conn.send((result).to_bytes(4, byteorder='big'))
     except Exception as e:
       print(f" error sending {e}")
     
