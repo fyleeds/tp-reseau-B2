@@ -84,53 +84,42 @@ while True:
 
         folder_path = os.path.dirname(os.path.abspath(__file__))
 
-        file = open(f'{folder_path}/htdocs/yoshi.jpg','rb')
-        jpg_data = file.read()
-        file.close()
+        file_path = folder_path + "/htdocs/yoshi.jpg"
+
 
         # Préparation de la réponse HTTP
         
         http_response = b'HTTP/1.1 200 OK\r\n'
         http_response += b'Content-Type: image/jpeg\r\n'
-        http_response += b'Content-Length: ' + str(len(jpg_data)).encode() + b'\r\n'
         http_response += b'\r\n'
+        conn.sendall(http_response)
 
-        header = jpg_data[0:2]
-        if not header:
-          break
-        else :
-          logger.info("this is the header of the image : %s",header)
-        
-        jpg_data = jpg_data[2:]
+        with open(file_path, 'rb') as file:
+          jpg_data_len = len(bytearray(file.read()))
+          logger.info(f"Lecture des {jpg_data_len} prochains octets")
+          file.close()
 
-        jpg_data_len = len(bytearray(jpg_data))
-        logger.info(f"Lecture des {jpg_data_len} prochains octets")
+        with open(file_path, 'rb') as file:
 
-        chunks = []
-        bytes_received = 0
-        is_Ended= 0
-        while isEnded==0  :
+          # header = file.read(2)
+          # if not header:
+          #   logger.info("no header")
+          #   break
+          # else :
+          #   logger.info("this is the header of the image : %s",header)
+
+          bytes_received = 0
           while bytes_received < jpg_data_len:
-            # Si on reçoit + que la taille annoncée, on lit 1024 par 1024 octets
-            chunk = jpg_data[lastIndex:min(msg_len - bytes_received,
-                                    1024)])
+            chunk_len = min(jpg_data_len - bytes_received,
+                                1024)
+            logger.info(chunk_len)
+            chunk = file.read(chunk_len)
             if not chunk:
-              raise RuntimeError('Invalid chunk received bro')
-
-            try:
-              if chunk.decode() == "0xffd9":
-                chunks.append(chunk)
-                isEnded = 1
-              else :
-                # on ajoute le morceau de 1024 ou moins à notre liste
-                chunks.append(chunk)
-            except:
-              # on ajoute le morceau de 1024 ou moins à notre liste
-              chunks.append(chunk)
-            
-            # on ajoute la quantité d'octets reçus au compteur
+                logger.info("no chunk")
+                break  # End of file
+            conn.sendall(chunk)
+            logger.info(f"Sent a chunk of size: {len(chunk)} bytes.")
             bytes_received += len(chunk)
-
 
     else:
       print(f"Received from client {message_received}")
