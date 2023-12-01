@@ -3,12 +3,12 @@ import re
 import sys
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(('10.1.2.12', 13337))
+s.connect(('localhost', 13337))
 
 # Récupération d'une string utilisateur
 msg = input("Calcul à envoyer: ")
 
-pattern = r'^(-?\d{1,10})\s*([+*-])\s*(-?\d{1,10})$'
+pattern = r'^(-?\d{1,10})\s*([+*-/%])\s*(-?\d{1,10})$'
 
 match = re.match(pattern, msg)
 

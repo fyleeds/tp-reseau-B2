@@ -14,12 +14,6 @@ while True:
     # On lit les 4 premiers octets qui arrivent du client
     # Car dans le client, on a fixé la taille du header à 4 octets
     isEnded = 0
-    isAddition = 0
-    isMultiply = 0
-    isSubstract = 0
-    isDivide = 0
-    isModulo = 0
-    isPower = 0
     # Une liste qui va contenir les données reçues
     chunks = []
     numbers = []
@@ -35,7 +29,6 @@ while True:
       print(f"Lecture des {msg_len} prochains octets")
 
       bytes_received = 0
-      numbersAdded = 0
       
       while bytes_received < msg_len:
           # Si on reçoit + que la taille annoncée, on lit 1024 par 1024 octets
@@ -47,16 +40,6 @@ while True:
           try:
             if chunk.decode('utf-8') == "hehe":
               isEnded = 1
-            elif chunk.decode('utf-8') == "+":
-              isAddition = 1
-            elif chunk.decode('utf-8') == "-":
-              isSubstract = 1
-            elif chunk.decode('utf-8') == "*":
-              isMultiply = 1
-            elif chunk.decode('utf-8') == "/":
-              isDivide = 1
-            elif chunk.decode('utf-8') == "%":
-              isModulo = 1
             else :
               # on ajoute le morceau de 1024 ou moins à notre liste
               numbers.append(chunk)
@@ -67,22 +50,30 @@ while True:
           # on ajoute la quantité d'octets reçus au compteur
           bytes_received += len(chunk)
 
-    if isAddition == 1 :
-      result =  int.from_bytes(numbers[0], byteorder='big') + int.from_bytes(numbers[1], byteorder='big')
-    elif isSubstract == 1 :
-      result = int.from_bytes(numbers[0], byteorder='big') - int.from_bytes(numbers[1], byteorder='big')
-    elif isMultiply == 1 :
-      result = int.from_bytes(numbers[0], byteorder='big') * int.from_bytes(numbers[1], byteorder='big')
-    elif isDivide == 1 :
-      result = int.from_bytes(numbers[0], byteorder='big') // int.from_bytes(numbers[1], byteorder='big')
-    elif isModulo == 1 :
-      result = int.from_bytes(numbers[0], byteorder='big') % int.from_bytes(numbers[1], byteorder='big')
-    elif isPower == 1 :
-      result = int.from_bytes(numbers[0], byteorder='big') ** int.from_bytes(numbers[1], byteorder='big')
-
     try:
-      print(f" le résultat est {result}")
-      conn.send(result.to_bytes(8, byteorder='big'))
+      result = ""
+      resultFinal = 0
+      for chunk in numbers:
+
+        if chunk.decode('utf-8') == "+" or chunk.decode('utf-8') == "*" or chunk.decode('utf-8') == "/" or chunk.decode('utf-8') == "-" or chunk.decode('utf-8') == "%" or chunk.decode('utf-8') == "**":
+          try:
+            # print(f"Received from client with decoding {chunk.decode('utf-8')}")
+            result +=chunk.decode('utf-8')
+            # print(f"result is {result}")
+          except Exception as e:
+            print(f"error decoding {e}")
+        else:
+          try: 
+            # print(f"Received from client with decoding {int.from_bytes(chunk, byteorder='big')}")
+            result += str(int.from_bytes(chunk, byteorder='big'))
+            # print(f"result is {result}")
+          except Exception as e:
+            print(f"error decoding {e}")
+
+      print(f"final result operation:  {result}")
+      resultFinal = eval(result)
+      print(f" le résultat est {resultFinal}")
+      conn.send(resultFinal.to_bytes((resultFinal.bit_length()+7)//8, byteorder='big'))
     except Exception as e:
       print(f" error sending {e}")
     
