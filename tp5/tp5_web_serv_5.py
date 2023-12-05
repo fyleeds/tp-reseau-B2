@@ -17,15 +17,11 @@ while True:
     if not header:
       print("no header")
       break
-    # On lit la valeur
-    msg_len = int.from_bytes(header[0:4], byteorder='big')
+
     # Une liste qui va contenir les données reçues
     chunks = []
 
     bytes_received = 0
-    # On lit la valeur
-    msg_len = int.from_bytes(header[0:4], byteorder='big')
-
 
     chunk = conn.recv(
                             1024)
@@ -100,13 +96,6 @@ while True:
           file.close()
 
         with open(file_path, 'rb') as file:
-
-          # header = file.read(2)
-          # if not header:
-          #   logger.info("no header")
-          #   break
-          # else :
-          #   logger.info("this is the header of the image : %s",header)
 
           bytes_received = 0
           while bytes_received < jpg_data_len:
