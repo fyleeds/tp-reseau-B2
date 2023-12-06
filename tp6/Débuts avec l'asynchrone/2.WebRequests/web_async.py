@@ -45,35 +45,38 @@ async def get_new_filename():
     # return a new web page name
     return f"{folder_path}/{web_page_name}"
 
-async def main():
-    await set_logger()
-    logger.info("Starting tasks...")
+async def write_content(html_content,filename):
+    try : 
+        async with aiofiles.open(filename, "w", encoding='utf-8') as out:
+            await out.write(html_content)
+            await out.flush() 
+            logger.info(f"{filename} has been created")
+            logger.info("All tasks completed.")
+    except Exception as e:
+        logger.info(f"Failed to write the webpage in a document: {e}")
+        logger.info("all tasks failed")
+        sys.exit(1)
 
+async def get_content(url):
     async with aiohttp.ClientSession() as session:
-
         try:
-            async with session.get(sys.argv[1]) as resp:
-                # resp contient le contenu HTML de la page
-                resp = await resp.read()
-                html_content = resp.decode('utf-8')
-                logger.info(f"Success to retrieve the webpage {sys.argv[1]}")
+                async with session.get(url) as resp:
+                    # resp contient le contenu HTML de la page
+                    resp = await resp.read()
+                    html_content = resp.decode('utf-8')
+                    return html_content
+                    logger.info(f"Success to retrieve the webpage {url}")
         except Exception as e:
             logger.info(f"Failed to retrieve the webpage: {e}")
             logger.info("all tasks failed")
             sys.exit(1)
 
-        filename = await get_new_filename()
+async def main():
+    await set_logger()
+    logger.info("Starting tasks...")
+    url = sys.argv[1]
+    await write_content(await get_content(url),await get_new_filename())
 
-        try : 
-            async with aiofiles.open(filename, "w", encoding='utf-8') as out:
-                await out.write(html_content)
-                await out.flush() 
-                logger.info(f"{filename} has been created")
-                logger.info("All tasks completed.")
-        except Exception as e:
-            logger.info(f"Failed to write the webpage in a document: {e}")
-            logger.info("all tasks failed")
-            sys.exit(1)
 
 # Exécuter la fonction principale
 if __name__ == "__main__":
