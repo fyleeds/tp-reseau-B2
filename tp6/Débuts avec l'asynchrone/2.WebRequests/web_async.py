@@ -3,7 +3,8 @@ import sys
 import os
 import requests
 import aiohttp
-
+import aiofiles
+import asyncio
 ids = []
 
 try:
@@ -19,7 +20,7 @@ except Exception as e:
     print(f"Failed to configure logging: {e}")
     sys.exit(1)
 
-async def get_content(url):
+def get_content(url):
 
     # Perform a GET request to the URL
     response = requests.get(url)
@@ -30,7 +31,7 @@ async def get_content(url):
         logger.info("Failed to retrieve the webpage.")
         return None
     
-async def get_new_filename():
+def get_new_filename():
 
     folder_path = os.path.dirname(os.path.abspath(__file__))
     folder_path +=  "/tmp"
@@ -66,6 +67,26 @@ async def write_content(content,filename):
         except Exception as e:
             logger.info(f"Failed to write webpage to file {filename} with error : {e}")
 
+
+async def main():
+    print("Starting tasks...")
+    # write_content(get_content(sys.argv[1]),get_new_filename())
+    # tasks=[get_content(sys.argv[1]),count_to_ten()]   
+    # for task in tasks:
+    #     await task
+    async with aiohttp.ClientSession() as session:
+        async with session.get(sys.argv[1]) as resp:
+            resp = await resp.read()
+            html_content = resp.decode('utf-8')
+            # resp contient le contenu HTML de la page
+            print(resp)
+            
+    async with aiofiles.open(get_new_filename(), "w", encoding='utf-8') as out:
+        await out.write(html_content)
+        await out.flush() 
+
+    print("All tasks completed.")
+
 # Exécuter la fonction principale
 if __name__ == "__main__":
-    write_content(get_content(sys.argv[1]),get_new_filename())
+    asyncio.run(main())
