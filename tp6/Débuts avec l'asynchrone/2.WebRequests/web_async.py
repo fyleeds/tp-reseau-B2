@@ -2,7 +2,7 @@ import logging
 import sys
 import os
 import requests
-import re
+import aiohttp
 
 ids = []
 
@@ -19,7 +19,7 @@ except Exception as e:
     print(f"Failed to configure logging: {e}")
     sys.exit(1)
 
-def get_content(url):
+async def get_content(url):
 
     # Perform a GET request to the URL
     response = requests.get(url)
@@ -30,20 +30,7 @@ def get_content(url):
         logger.info("Failed to retrieve the webpage.")
         return None
     
-def check_url(url):
-
-    # Perform a GET request to the URL
-    pattern = r'^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
-    match = re.match(pattern, url)
-    if match:
-        logger.info("URL is valid")
-        return True
-    else:
-        logger.info("URL is not valid please reenter a valid url ")
-        return False
-
-    
-def get_new_filename():
+async def get_new_filename():
 
     folder_path = os.path.dirname(os.path.abspath(__file__))
     folder_path +=  "/tmp"
@@ -64,7 +51,7 @@ def get_new_filename():
     # return a new web page name
     return f"{folder_path}/{web_page_name}"
 
-def write_content(content,filename):
+async def write_content(content,filename):
 
     if content == None:
         logger.info(f"Failed to get the content of {filename}")
@@ -81,5 +68,4 @@ def write_content(content,filename):
 
 # Exécuter la fonction principale
 if __name__ == "__main__":
-    if check_url(sys.argv[1]):
-        write_content(get_content(sys.argv[1]),get_new_filename())
+    write_content(get_content(sys.argv[1]),get_new_filename())
