@@ -6,6 +6,7 @@ import aiohttp
 import aiofiles
 import asyncio
 import re
+import datetime
 
 # id_array
 ids = []
@@ -72,10 +73,21 @@ async def get_content(url):
             sys.exit(1)
 
 async def main():
+    # Capture start time
+    start_time = datetime.datetime.now()
+
     await set_logger()
     logger.info("Starting tasks...")
+
     url = sys.argv[1]
     await write_content(await get_content(url),await get_new_filename())
+
+    
+    # Capture end time
+    end_time = datetime.datetime.now()
+
+    # Calculate the difference in seconds
+    logger.info(f"{(end_time - start_time).total_seconds()} seconds elapsed" )
 
 
 # Exécuter la fonction principale

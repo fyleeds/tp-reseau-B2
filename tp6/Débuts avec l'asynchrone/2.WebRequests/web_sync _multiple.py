@@ -10,6 +10,25 @@ ids = []
 # Create a custom logger
 logger = logging.getLogger("http_server")
 
+def check_and_get_url(url):
+
+    # Perform a GET request to the URL
+    # pattern = r'^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$'
+    pattern = r'^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})$'
+    matches = re.findall(pattern, url)
+    for match in matches:
+        # Extract numbers from each match and convert them to integers
+        url = ""
+        if len(match) > 1:
+            # Get url without http:// or https://
+            url = match[1] + "." + match[2]
+            logger.info(f"URL is valid:{url}")
+            return url
+        
+        logger.info("URL is not valid please reenter a valid url ")
+        logger.info("all tasks failed")
+        return url
+
 def set_logger():
     try:
         logger.setLevel(logging.DEBUG)  # This needs to be DEBUG to capture all levels of logs
@@ -34,22 +53,21 @@ def get_content(url):
         logger.info("all tasks failed")
         sys.exit(1)
     
-def get_new_filename():
+def get_new_filename(url):
 
     folder_path = os.path.dirname(os.path.abspath(__file__))
     folder_path +=  "/tmp"
 
-    id=1
-    web_page_name = f"web_page{id}.html"
+    id=0
+    web_page_name = f"web_{url}.html"
 
     # list all webpage name in folder tmp
-    entries = os.listdir(folder_path)
-    logger.info(f"{entries} already exists")
+    # entries = os.listdir(folder_path)
 
     # check available id in ids already used
-    while web_page_name in entries:
-        id+=1
-        web_page_name = f"web_page{id}.html"
+    # while web_page_name in entries:
+    #     id+=1
+    #     web_page_name = f"web_{url}{id}.html"
     
     logger.info(f"{web_page_name} will be created at {folder_path}")
 
@@ -66,6 +84,7 @@ def write_content(content,filename):
     except Exception as e:
         logger.info(f"Failed to write webpage to file {filename} with error : {e}")
         logger.info("all tasks failed")
+        sys.exit(1)
         
 def main():
     # Capture start time
@@ -73,12 +92,15 @@ def main():
 
     set_logger()
     logger.info("Starting tasks...")
-
-    write_content(get_content(sys.argv[1]),get_new_filename())
+    for i in range(1,len(sys.argv)):
+        logger.info(f"task {i} : {sys.argv[i]}")
+        url = check_and_get_url(sys.argv[i])
+        if url != "":
+            write_content(get_content(sys.argv[i]),get_new_filename(url))
 
     logger.info("All tasks completed.")
 
-     # Capture end time
+    # Capture end time
     end_time = datetime.datetime.now()
 
     # Calculate the difference in seconds
