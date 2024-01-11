@@ -6,7 +6,7 @@
 ### Node ###
 # Logs
 
-/Linux/tp3/monitor
+/Linux/tp3/monitor/
 
 logs
 *.log
