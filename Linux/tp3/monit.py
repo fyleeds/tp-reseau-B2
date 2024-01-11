@@ -74,13 +74,49 @@ except Exception as e:
 
 logger.info("Le programme tourne")
 
+
 def getCpuTimes():
     cpu_times = psutil.cpu_times()
-    cpu_times_user = round(cpu_times.user,2)
-    logger.info("these are informations for cpu times for user: %s",cpu_times_user)
+    return cpu_times
+
+def getCpusPercent():
+    cpus_percent = psutil.cpu_percent(interval=1, percpu=True)
+    return cpus_percent
+
+def getCpuTimeUser():  
+    cpu_time_user = round(getCpuTimes().user,2)
+    logger.info("user time spend : %s",cpu_time_user)
+    return cpu_time_user
+
+def getCpuTimeSystem():  
+    cpu_time_system = round(getCpuTimes().system,2)
+    logger.info("system time spend : %s",cpu_time_system)
+    return cpu_time_system
+
+def getCpuTimeIdle():  
+    cpu_time_idle = round(getCpuTimes().idle,2)
+    logger.info("idle time spend: %s",cpu_time_idle)
+    return cpu_time_idle
+
+def getCpusPercentFormatted():
+    cpus_percent =  getCpusPercent() 
+    i=1
+    cpus_percent_list = []
+    logger.info("cpu list %s ",cpus_percent)
+    for cpu_percent in cpus_percent:
+        if cpu_percent != 0.0 :
+            cpus_percent_list.append("cpu" + str(i) + " utilization: " + str(cpu_percent) +" % ")
+            logger.info("cpu %s utilization: %s", i, cpu_percent)
+            i = i + 1
+    # cpu_time_idle = round(getCpuTimes().idle,2)
+    return cpus_percent_list
+
 
 def main():
-    getCpuTimes()
+    getCpuTimeUser()
+    getCpuTimeSystem()
+    getCpuTimeIdle()
+    getCpusPercentFormatted()
 
 if __name__ == "__main__":
     main()
