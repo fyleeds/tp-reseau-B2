@@ -5,6 +5,10 @@
 
 ### Node ###
 # Logs
+
+/tp-reseau-B2/Linux/tp3/monitor
+/tp-reseau-B2/Linux/tp3/var
+
 logs
 *.log
 npm-debug.log*
