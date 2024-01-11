@@ -3,6 +3,7 @@ import argparse
 import sys
 import logging
 import time
+import psutil
 # Création d'un objet ArgumentParser
 # parser = argparse.ArgumentParser()
 

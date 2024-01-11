@@ -6,8 +6,7 @@
 ### Node ###
 # Logs
 
-/tp-reseau-B2/Linux/tp3/monitor
-/tp-reseau-B2/Linux/tp3/var
+/Linux/tp3/monitor
 
 logs
 *.log
