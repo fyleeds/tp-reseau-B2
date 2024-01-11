@@ -6,7 +6,7 @@
 ### Node ###
 # Logs
 
-monit/
+/Linux/tp3/monit/
 
 logs
 *.log
