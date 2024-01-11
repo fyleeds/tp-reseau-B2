@@ -6,7 +6,7 @@
 ### Node ###
 # Logs
 
-monitor/
+monit/
 
 logs
 *.log
