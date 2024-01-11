@@ -76,7 +76,8 @@ logger.info("Le programme tourne")
 
 def getCpuTimes():
     cpu_times = psutil.cpu_times()
-    logger.info("these are informations for cpu times : ",cpu_times)
+    cpu_times_user = round(cpu_times.user,2)
+    logger.info("these are informations for cpu times for user: %s",cpu_times_user)
 
 def main():
     getCpuTimes()
