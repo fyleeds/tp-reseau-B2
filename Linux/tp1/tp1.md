@@ -6,7 +6,7 @@ Etant fondamentalement une techno Linux, **vous réaliserez le TP sur une VM Lin
 
 > *Oui oui les dévs, on utilisera Docker avec vos Windows/MacOS plus tard. Là on va se concentrer sur l'essence du truc.*
 
-![Meo](./img/container.jpg)
+![Meo](./docker_macron.jpg)
 
 ## Sommaire
 
